@@ -11,8 +11,11 @@ const TimerChallenge = ({ title, targetTime }) => {
 
   if (remainingTime <= 0) {
     clearInterval(timer.current);
-    setRemainingTime(targetTime * 1000);
     timerChallengeModal.current.open();
+  }
+
+  function resetTimer() {
+    setRemainingTime(targetTime * 1000);
   }
 
   function handleStart() {
@@ -32,6 +35,8 @@ const TimerChallenge = ({ title, targetTime }) => {
         ref={timerChallengeModal}
         result="You Lost"
         targetTime={targetTime}
+        remainingTime={remainingTime}
+        resetTimer={resetTimer}
       />
       <div className="challenge">
         <h2>{title}</h2>
