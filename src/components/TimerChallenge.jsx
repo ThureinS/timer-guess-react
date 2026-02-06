@@ -49,7 +49,7 @@ const TimerChallenge = ({ title, targetTime }) => {
           </button>
         </p>
         <p className={isTimerActive ? "active" : undefined}>
-          {isTimerActive ? "Running" : "Stopped"}
+          {isTimerActive ? "Timer Active" : "Timer Inactive"}
         </p>
       </div>
     </>
