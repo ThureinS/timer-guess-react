@@ -2,40 +2,49 @@ import React, { useRef, useState } from "react";
 import ResultModal from "./ResultModal";
 
 const TimerChallenge = ({ title, targetTime }) => {
-  const [timerStarted, setTimerStarted] = useState(false);
-  const [timerEnd, setTimerEnd] = useState(false);
+  const [remainingTime, setRemainingTime] = useState(targetTime * 1000);
+
+  const isTimerActive = remainingTime > 0 && remainingTime < targetTime * 1000;
 
   const timer = useRef();
-  const modal = useRef();
+  const timerChallengeModal = useRef();
+
+  if (remainingTime <= 0) {
+    clearInterval(timer.current);
+    setRemainingTime(targetTime * 1000);
+    timerChallengeModal.current.open();
+  }
 
   function handleStart() {
-    timer.current = setTimeout(() => {
-      setTimerEnd(true);
-      modal.current.showModal();
-    }, targetTime * 1000);
-
-    setTimerStarted(true);
+    timer.current = setInterval(() => {
+      setRemainingTime((prevRemainingTime) => prevRemainingTime - 10);
+    }, 10);
   }
 
   function handleStop() {
-    clearTimeout(timer.current);
+    clearInterval(timer.current);
+    timerChallengeModal.current.open();
   }
 
   return (
     <>
-      <ResultModal ref={modal} result="You Lost" targetTime={targetTime} />
+      <ResultModal
+        ref={timerChallengeModal}
+        result="You Lost"
+        targetTime={targetTime}
+      />
       <div className="challenge">
         <h2>{title}</h2>
         <p className="challenge-time">
           {targetTime} second{targetTime > 1 ? "s" : ""}
         </p>
         <p>
-          <button onClick={timerStarted ? handleStop : handleStart}>
-            {timerStarted ? "Stop" : "Start"} Challenge
+          <button onClick={isTimerActive ? handleStop : handleStart}>
+            {isTimerActive ? "Stop" : "Start"} Challenge
           </button>
         </p>
-        <p className={timerStarted ? "active" : undefined}>
-          {timerStarted ? "Running" : "Stopped"}
+        <p className={isTimerActive ? "active" : undefined}>
+          {isTimerActive ? "Running" : "Stopped"}
         </p>
       </div>
     </>
