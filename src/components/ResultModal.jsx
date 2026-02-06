@@ -21,7 +21,7 @@ const ResultModal = ({
   });
 
   return (
-    <dialog ref={resultModalRef} className="result-modal">
+    <dialog ref={resultModalRef} className="result-modal" onClose={resetTimer}>
       {playerLost && <h2>You Lost!</h2>}
       {!playerLost && <h2>Your Score: {score}</h2>}
       <p>
